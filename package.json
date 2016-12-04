@@ -4,7 +4,7 @@
   "description": "Starter kit for React and Redux",
   "scripts": {
     "start": "npm-run-all --parallel open:src lint:watch",
-    "build": "set NODE_ENV=production && webpack --config webpack/config-prod.js",
+    "build": "set NODE_ENV=production && webpack --config webpack/config-prod.babel.js",
     "open:src": "babel-node webpack/start.js",
     "lint": "node_modules/.bin/esw config.* src webpack",
     "lint:watch": "npm run lint -- --watch"
