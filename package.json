@@ -1,6 +1,6 @@
 {
   "name": "react-redux-starter",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Starter kit for React and Redux",
   "scripts": {
     "start": "npm-run-all --parallel open:src lint:watch",
