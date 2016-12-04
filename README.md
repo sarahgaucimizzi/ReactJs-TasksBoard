@@ -2,10 +2,10 @@
 
 **Table of Contents**
 
-- [List of Packages included](#packages)
+- [List of Packages included](#list-of-packages-included)
 - [Installation](#installation)
 - [Run](#run)
-- [Packaging](#Packaging)
+- [Packaging](#packaging)
 - [Credits](#credits)
 
 ## List of Packages included
