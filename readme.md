@@ -1,4 +1,4 @@
-# React, Redux, Router, Axios, Immutable, ESLint, ES6, Sass Boilerplate
+# React, Redux, Router, Immutable, ESLint, ES6, Sass Boilerplate
 
 ## Install
 ```sh
@@ -15,7 +15,3 @@ $ npm start
 ```sh
 $ npm run build
 ```
-
-## License
-
-MIT © Zephyris13
