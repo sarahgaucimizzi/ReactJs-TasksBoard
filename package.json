@@ -66,9 +66,7 @@
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "url-loader": "0.5.7",
-    "lodash": "^4.17.2",
     "open": "^0.0.5",
-    "colors": "^1.1.2",
     "npm-run-all": "^3.1.2",
     "copy-webpack-plugin": "^4.0.1"
   }

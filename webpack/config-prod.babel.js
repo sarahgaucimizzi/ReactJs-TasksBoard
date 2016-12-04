@@ -1,15 +1,15 @@
 import webpack from 'webpack';
-import _ from 'lodash';
 import path from 'path';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import baseWebpackConfig from './config';
 
-module.exports = _.assign(baseWebpackConfig, {
+export default {
+  ...baseWebpackConfig,
   debug: false,
   noInfo: true,
   devtool: 'cheap-source-map',
   entry: [
-    path.resolve(__dirname, '../src/index'),
+    path.join(__dirname, '../src/index'),
   ],
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
@@ -27,7 +27,9 @@ module.exports = _.assign(baseWebpackConfig, {
       },
     }),
     new CopyWebpackPlugin([
-        { from: 'src/index.html' },
+      {
+        from: 'src/index.html',
+      },
     ]),
   ],
-});
+};
