@@ -1,6 +1,11 @@
 import webpack from 'webpack';
 import path from 'path';
 
+import postCSSImport from 'postcss-import';
+import postCSSNested from 'postcss-nested';
+import postCSSNext from 'postcss-cssnext';
+import postCSSSimpleVars from 'postcss-simple-vars';
+
 export default {
   debug: true,
   devtool: 'source-map',
@@ -27,6 +32,14 @@ export default {
       __DEV__: true,
     }),
   ],
+  postcss: function plugins(wp) {
+    return [
+      postCSSImport({ addDependencyTo: wp }),
+      postCSSSimpleVars({ silent: true }),
+      postCSSNested(),
+      postCSSNext(),
+    ];
+  },
   module: {
     loaders: [
       {

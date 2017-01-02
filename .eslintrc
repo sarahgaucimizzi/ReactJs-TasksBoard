@@ -28,6 +28,9 @@
     "max-len": 0,
     "no-plusplus": 0,
     "linebreak-style": 0,
+    "no-restricted-syntax": 0,
+    "no-prototype-builtins": 0,
+    "react/jsx-no-target-blank": 0,
     "newline-before-return": 2
   }
 }
