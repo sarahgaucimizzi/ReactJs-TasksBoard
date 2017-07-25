@@ -31,6 +31,11 @@ export default {
     new webpack.DefinePlugin({
       __DEV__: true,
     }),
+    new webpack.ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery',
+      jquery: 'jquery',
+    }),
   ],
   postcss: function plugins(wp) {
     return [
@@ -92,6 +97,7 @@ export default {
         test: /\.(svg|eot|ttf|wav|mp3)$/,
         loader: 'file-loader',
       },
+      { test: /bootstrap.+\.(jsx|js)$/, loader: 'imports?jQuery=jquery,$=jquery,this=>window' },
     ],
   },
 };
