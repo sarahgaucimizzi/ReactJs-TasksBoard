@@ -1,0 +1,33 @@
+.taskTodo {
+    background-color: gold;
+}
+
+.taskInProgress {
+    background-color: orange;
+}
+
+.taskFinished {
+    background-color: lightgreen;
+}
+
+.task {
+    margin: 20px;
+    padding: 20px 30px;
+}
+
+.taskTitle {
+    padding: 10px;
+    font-size: 20px;
+}
+
+.taskDuration {
+    font-size: 14px;
+    color: grey;
+}
+
+.taskButton {
+    background: transparent;
+    border: none;
+    color: grey;
+    margin: 5px;
+}

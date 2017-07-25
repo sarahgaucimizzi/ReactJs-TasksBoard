@@ -1,32 +1,32 @@
 import React, { Component, PropTypes } from 'react';
-import { showErrorNotification } from '../../helpers/taskFunctions';
+import { showErrorNotification, fetchTasks } from '../../helpers/taskFunctions';
 
-import styles from './style.scss';
+import styles from './styles.scss';
 
-export default class HomePage extends Component {
+export default class Board extends Component {
   static propTypes = {
-    router: PropTypes.any.isRequired,
+    firebase: PropTypes.any,
+    userId: PropTypes.string,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      firebaseAuth: this.props.router.routes[1].firebase && this.props.router.routes[1].firebase.auth(),
-      email: '',
-      password: '',
+      firebaseDb: this.props.firebase.database(),
+      userId: this.props.userId,
     };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      firebaseAuth: nextProps.router.routes[1].firebase.auth(),
+      firebaseDb: nextProps.firebase.database(),
+      userId: nextProps.userId,
     });
   }
 
   _logout = () => {
     this.state.firebaseAuth.signOut().then(() => {
-      console.log('logged out');
     }).catch((error) => {
       console.log(error);
       showErrorNotification(error.message);
@@ -49,7 +49,7 @@ export default class HomePage extends Component {
         </div>
         <div className="row">
           <div className="col-md-4">
-            <div id="tasksContainer-todo" />
+            <div id="tasksContainer-todo">{fetchTasks(this.state.firebaseDb, this.state.userId)}</div>
           </div>
           <div className="col-md-4">
             <div id="tasksContainer-inprogress" />

@@ -6,9 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-notify/bootstrap-notify.min';
 import 'animate.css/animate.min.css';
 
+import Board from '../board';
+
 export default class Layout extends Component {
   static propTypes = {
-    children: PropTypes.object.isRequired,
     router: PropTypes.any.isRequired,
     location: PropTypes.object.isRequired,
   };
@@ -26,7 +27,9 @@ export default class Layout extends Component {
   componentWillMount() {
     this.state.firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
-        this.state.userId = user.uid;
+        this.setState({
+          userId: user.uid,
+        });
         if (this.props.location.pathname !== '/') {
           this.props.router.push('/');
         }
@@ -39,7 +42,7 @@ export default class Layout extends Component {
   render() {
     return (
       <div>
-        {this.props.children}
+        <Board userId={this.state.userId} firebase={this.props.router.routes[1].firebase} />
       </div>
     );
   }

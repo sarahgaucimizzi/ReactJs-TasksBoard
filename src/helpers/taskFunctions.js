@@ -1,3 +1,6 @@
+import React from 'react';
+import Task from '../components/Task';
+
 let todoHoursCount = 0;
 let inprogressHoursCount = 0;
 
@@ -53,40 +56,34 @@ export const showWarningNotification = (errorMessage) => {
   });
 };
 
-export const showTask = (id, duration, isDeleted, state, title) => {
+export const showTask = (firebaseDb, userId, id, duration, isDeleted, state, title) => {
   switch (state) {
     case 'todo':
       todoHoursCount += duration;
-      // $('#tasksContainer-todo').append('<div class="task task-todo animated fadeInUp"><span class="task-duration">' + duration + ' hours </span><br /><span class="task-title">' + title + '</span><br /><div class="clearfix"><div class="pull-right"><button class="glyphicon glyphicon-arrow-right task-button" onclick="moveToInProgress(\'' + userId + '\',\'' + id + '\')"></button><button class="glyphicon glyphicon-pencil task-button" onclick="editTaskModal(\'' + userId + '\',\'' + id + '\')"></button><button class="glyphicon glyphicon-trash task-button pull-right" onclick="deleteTaskModal(\'' + userId + '\',\'' + id + '\')"></button></div></div></div>');
       break;
     case 'inprogress':
       inprogressHoursCount += duration;
-      // $('#tasksContainer-inprogress').append('<div class="task task-inprogress animated fadeInUp"><span class="task-duration">' + duration + ' hours </span><br /><span class="task-title">' + title + '</span><br /><div class="clearfix"><div class="pull-right"><button class="glyphicon glyphicon-arrow-left task-button" onclick="moveToToDo(\'' + userId + '\',\'' + id + '\')"></button><button class="glyphicon glyphicon-arrow-right task-button" onclick="moveToFinished(\'' + userId + '\',\'' + id + '\')"></button><button class="glyphicon glyphicon-pencil task-button" onclick="editTaskModal(\'' + userId + '\',\'' + id + '\')"></button><button class="glyphicon glyphicon-trash task-button" onclick="deleteTaskModal(\'' + userId + '\',\'' + id + '\')"></button></div></div></div>');
-      break;
-    case 'finished':
-      // $('#tasksContainer-finished').append('<div class="task task-finished animated fadeInUp"><span class="task-duration">' + duration + ' hours </span><br /><span class="task-title">' + title + '</span><br /><div class="clearfix"><button class="glyphicon glyphicon-trash task-button pull-right" onclick="deleteTaskModal(\'' + userId + '\',\'' + id + '\')"></button></div></div>');
       break;
     default:
       break;
   }
+
+  return <Task firebaseDb={firebaseDb} userId={userId} id={id} duration={duration} isDeleted={isDeleted} state={state} title={title} />;
 };
 
 export const fetchTasks = (firebaseDb, userId) => {
-  const userTasks = firebaseDb.ref(`tasks/${userId}`).orderByChild('isDeleted').equalTo(false);
-  userTasks.on('value', (snapshot) => {
-    $('#tasksContainer-todo').empty();
-    $('#tasksContainer-inprogress').empty();
-    $('#tasksContainer-finished').empty();
+  if (userId !== null || userId !== '' || userId !== undefined) {
+    const userTasks = firebaseDb.ref(`tasks/${userId}`).orderByChild('isDeleted').equalTo(false);
+    userTasks.on('value', (snapshot) => {
+      todoHoursCount = 0;
+      inprogressHoursCount = 0;
+      console.log(snapshot.val());
 
-    todoHoursCount = 0;
-    inprogressHoursCount = 0;
-
-    const data = snapshot.val();
-
-    snapshot.forEach(() => {
-      showTask(data.key, data.val().duration, data.val().isDeleted, data.val().state, data.val().title);
+      return snapshot.forEach((data) => { console.log(data.val()); showTask(firebaseDb, userId, data.key, data.val().duration, data.val().isDeleted, data.val().state, data.val().title); });
     });
-  });
+  }
+
+  return null;
 };
 
 export const addTask = (firebaseDb, userId, title, duration) => {
