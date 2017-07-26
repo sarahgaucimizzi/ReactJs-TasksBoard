@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { showErrorNotification } from '../../helpers/common';
 
+import styles from './styles.scss';
+
 export default class Login extends Component {
   static propTypes = {
     router: PropTypes.any.isRequired,
@@ -74,11 +76,11 @@ export default class Login extends Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="row">
+      <div className={`container ${styles.loginContainer}`}>
+        <div className={`row ${styles.loginRow}`}>
           <div className="col-md-8 col-md-offset-2">
-            <h1>Login or Create an Account</h1>
-            <div id="loginForm">
+            <h1 className={styles.headerTitle}>Login or Create an Account</h1>
+            <div className="loginForm">
               <div className="form-group">
                 <label htmlFor="email">Email address</label>
                 <input type="email" className="form-control" name="email" placeholder="Email" value={this.state.email} onChange={this._handleEmailChange} />
@@ -87,7 +89,9 @@ export default class Login extends Component {
                 <label htmlFor="password">Password</label>
                 <input type="password" className="form-control" name="password" placeholder="Password" value={this.state.password} onChange={this._handlePasswordChange} />
               </div>
-              <button onClick={this._loginRegister} className="btn btn-default">Login</button>
+              <div className={styles.buttonContainer}>
+                <button onClick={this._loginRegister} className={`btn btn-default ${styles.loginButton}`}>Login</button>
+              </div>
             </div>
           </div>
         </div>

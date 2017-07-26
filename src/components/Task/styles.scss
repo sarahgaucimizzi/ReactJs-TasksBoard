@@ -1,13 +1,15 @@
+@import '../../variables.scss';
+
 .taskTodo {
-    background-color: gold;
+    background-color: $todo-colour;
 }
 
 .taskInProgress {
-    background-color: orange;
+    background-color: $inprogress-colour;
 }
 
 .taskFinished {
-    background-color: lightgreen;
+    background-color: $finished-colour;
 }
 
 .task {
@@ -17,7 +19,8 @@
 
 .taskTitle {
     padding: 10px;
-    font-size: 20px;
+    font-size: 24px;
+    font-family: 'Questrial', sans-serif;
 }
 
 .taskDuration {

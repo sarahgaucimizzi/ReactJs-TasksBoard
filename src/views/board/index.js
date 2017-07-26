@@ -65,6 +65,10 @@ export default class Board extends Component {
   _addTaskModal = () => {
     this.setState({
       openAddTaskModal: true,
+      taskId: '',
+      title: '',
+      state: 'todo',
+      duration: '',
     });
   }
 
@@ -92,17 +96,29 @@ export default class Board extends Component {
   }
 
   _editTaskModal = (taskId) => {
-    const taskURL = this.state.firebaseDb.ref(`tasks/${this.state.userId}/${taskId}`);
-    taskURL.once('value', (snapshot) => {
-      const task = snapshot.val();
+    const task = this.state.todoTasks.filter(item => item.id === taskId);
+    if (task[0] !== undefined) {
       this.setState({
-        taskId: snapshot.key,
-        title: task.title,
-        duration: parseInt(task.duration, 10),
-        state: task.state,
+        taskId,
+        title: task[0].title,
+        duration: parseInt(task[0].duration, 10),
+        state: task[0].state,
         openEditTaskModal: true,
       });
-    });
+    } else {
+      const inprogressTask = this.state.inprogressTasks.filter(item => item.id === taskId);
+      if (inprogressTask[0] !== undefined) {
+        this.setState({
+          taskId,
+          title: inprogressTask[0].title,
+          duration: parseInt(inprogressTask[0].duration, 10),
+          state: inprogressTask[0].state,
+          openEditTaskModal: true,
+        });
+      } else {
+        showErrorNotification('Task not found. Try again.');
+      }
+    }
   }
 
   _editTask = () => {
@@ -142,17 +158,40 @@ export default class Board extends Component {
   }
 
   _deleteTaskModal = (taskId) => {
-    const taskURL = this.state.firebaseDb.ref(`tasks/${this.state.userId}/${taskId}`);
-    taskURL.once('value', (snapshot) => {
-      const task = snapshot.val();
+    const task = this.state.todoTasks.filter(item => item.id === taskId);
+    if (task[0] !== undefined) {
       this.setState({
-        taskId: snapshot.key,
-        title: task.title,
-        duration: parseInt(task.duration, 10),
-        state: task.state,
+        taskId,
+        title: task[0].title,
+        duration: parseInt(task[0].duration, 10),
+        state: task[0].state,
         openDeleteTaskModal: true,
       });
-    });
+    } else {
+      const inprogressTask = this.state.inprogressTasks.filter(item => item.id === taskId);
+      if (inprogressTask[0] !== undefined) {
+        this.setState({
+          taskId,
+          title: inprogressTask[0].title,
+          duration: parseInt(inprogressTask[0].duration, 10),
+          state: inprogressTask[0].state,
+          openDeleteTaskModal: true,
+        });
+      } else {
+        const finishedTasks = this.state.finishedTasks.filter(item => item.id === taskId);
+        if (finishedTasks[0] !== undefined) {
+          this.setState({
+            taskId,
+            title: finishedTasks[0].title,
+            duration: parseInt(finishedTasks[0].duration, 10),
+            state: finishedTasks[0].state,
+            openDeleteTaskModal: true,
+          });
+        } else {
+          showErrorNotification('Task not found. Try again.');
+        }
+      }
+    }
   }
 
   _deleteTask = () => {
@@ -186,27 +225,25 @@ export default class Board extends Component {
   }
 
   _moveToTodo = (taskId) => {
-    const taskURL = this.state.firebaseDb.ref(`tasks/${this.state.userId}/${taskId}`);
-    taskURL.once('value', (snapshot) => {
-      const task = snapshot.val();
-
-      if ((this.state.todoHoursCount + task.duration) <= 24) {
-        this._editTaskFirebase(taskId, { title: task.title, duration: task.duration, state: 'todo', isDeleted: false });
+    const task = this.state.inprogressTasks.filter(item => item.id === taskId);
+    if (task[0] !== undefined) {
+      if ((this.state.todoHoursCount + task[0].duration) <= 24) {
+        this._editTaskFirebase(taskId, { title: task[0].title, duration: task[0].duration, state: 'todo', isDeleted: false });
         this.setState({
-          todoHoursCount: this.state.todoHoursCount + task.duration,
-          inprogressCount: this.state.inprogressCount - task.duration,
+          todoHoursCount: this.state.todoHoursCount + task[0].duration,
+          inprogressCount: this.state.inprogressCount - task[0].duration,
         });
       } else {
         showWarningNotification('Cannot have more than 24 hours in the todo column');
       }
-    });
+    } else {
+      showErrorNotification('Task not found. Try again.');
+    }
   }
 
   _moveToInProgress = (taskId) => {
-    const taskURL = this.state.firebaseDb.ref(`tasks/${this.state.userId}/${taskId}`);
-    taskURL.once('value', (snapshot) => {
-      const task = snapshot.val();
-
+    const task = this.state.todoTasks.filter(item => item.id === taskId);
+    if (task[0] !== undefined) {
       if ((this.state.inprogressHoursCount + task.duration) <= 8) {
         this._editTaskFirebase(taskId, { title: task.title, duration: task.duration, state: 'inprogress', isDeleted: false });
         this.setState({
@@ -216,19 +253,21 @@ export default class Board extends Component {
       } else {
         showWarningNotification('Cannot have more than 8 hours in the in progress column');
       }
-    });
+    } else {
+      showErrorNotification('Task not found. Try again.');
+    }
   }
 
   _moveToFinished = (taskId) => {
-    const taskURL = this.state.firebaseDb.ref(`tasks/${this.state.userId}/${taskId}`);
-    taskURL.once('value', (snapshot) => {
-      const task = snapshot.val();
-
+    const task = this.state.inprogressCount.filter(item => item.id === taskId);
+    if (task[0] !== undefined) {
       this._editTaskFirebase(taskId, { title: task.title, duration: task.duration, state: 'finished', isDeleted: false });
       this.setState({
         inprogressCount: this.state.inprogressCount - task.duration,
       });
-    });
+    } else {
+      showErrorNotification('Task not found. Try again.');
+    }
   }
 
   _fetchTasks = (userId = this.state.userId) => {
@@ -328,12 +367,7 @@ export default class Board extends Component {
         <div className="row">
           <div className="col-md-12">
             <button className={`btn btn-danger pull-right ${styles.logoutButton}`} onClick={this._logout}>Logout</button>
-            <h1>Board</h1>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
-            <button className="btn btn-info pull-right add-button" onClick={this._addTaskModal}>+</button>
+            <h1 className={styles.headerTitle}>Tasks Board</h1>
           </div>
         </div>
         <div className="row">
@@ -347,7 +381,7 @@ export default class Board extends Component {
             <div id="tasksContainer-finished">{this._renderFinishedTasks()}</div>
           </div>
         </div>
-        <ReactModal isOpen={this.state.openAddTaskModal} onRequestClose={this._closeAddTaskModal} contentLabel="Add new Task">
+        <ReactModal className={styles.reactModalContent} shouldCloseOnOverlayClick portalClassName={styles.reactModalOverlay} isOpen={this.state.openAddTaskModal} onRequestClose={this._closeAddTaskModal} contentLabel="Add new Task">
           <div id="addTaskForm">
             <div className="form-group">
               <label htmlFor="title">Title</label>
@@ -366,7 +400,7 @@ export default class Board extends Component {
             </div>
           </div>
         </ReactModal>
-        <ReactModal isOpen={this.state.openEditTaskModal} onRequestClose={this._closeEditTaskModal} contentLabel="Edit Task">
+        <ReactModal className={styles.reactModalContent} shouldCloseOnOverlayClick portalClassName={styles.reactModalOverlay} isOpen={this.state.openEditTaskModal} onRequestClose={this._closeEditTaskModal} contentLabel="Edit Task">
           <div id="editTaskForm">
             <div className="form-group">
               <label htmlFor="title">Title</label>
@@ -385,7 +419,7 @@ export default class Board extends Component {
             </div>
           </div>
         </ReactModal>
-        <ReactModal isOpen={this.state.openDeleteTaskModal} onRequestClose={this._closeDeleteTaskModal} contentLabel="Delete Task">
+        <ReactModal className={styles.reactModalDeleteContent} shouldCloseOnOverlayClick portalClassName={styles.reactModalOverlay} isOpen={this.state.openDeleteTaskModal} onRequestClose={this._closeDeleteTaskModal} contentLabel="Delete Task">
           <div>
             Are you sure you want to delete the task?
             <hr />
@@ -397,6 +431,7 @@ export default class Board extends Component {
             </div>
           </div>
         </ReactModal>
+        <button className={`btn ${styles.addButton}`} onClick={this._addTaskModal}>+</button>
       </div>
     );
   }

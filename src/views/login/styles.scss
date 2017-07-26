@@ -1,0 +1,50 @@
+@import "../../variables.scss";
+.loginContainer {
+    text-align: center;
+
+    .loginRow {
+        margin-top: 30vh;
+    }
+    
+    .headerTitle {
+        font-family: 'Questrial', sans-serif;
+        font-size: 60px;
+        color: $light-font-colour;
+    }
+
+    label {
+        color: $accent-colour;
+        font-weight: 300;
+        letter-spacing: 3px;
+    }
+
+    .buttonContainer {
+        text-align: center;
+        padding: 40px;
+
+        .loginButton {
+            margin: 10px;
+            padding: 20px 30px;
+            background-color: $accent-colour;
+            font-family: 'Questrial', sans-serif;
+            border-radius: 5px;
+            color: $light-font-colour;
+            text-transform: uppercase;
+            font-size: 18px;
+            letter-spacing: 5px;
+            display: initial;
+            border: transparent;
+            transition: all 250ms ease-out;
+            
+            &:hover {
+                margin: 0;
+                background-color: $accent-colour;
+                color: $light-font-colour;
+                padding: 30px 40px;
+                font-size: 20px;
+                text-decoration: none;
+                transition: all 250ms ease-out;
+            }
+        }
+    }
+}

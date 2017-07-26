@@ -10,6 +10,7 @@ import Layout from './views/layout';
 import Board from './views/board';
 
 import { CONFIG } from './config';
+import './styles.scss';
 
 const app = Firebase.initializeApp(CONFIG);
 

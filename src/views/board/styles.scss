@@ -1,3 +1,63 @@
+@import '../../variables.scss';
+.headerTitle {
+    font-family: 'Questrial', sans-serif;
+    font-size: 70px;
+    color: $light-font-colour;
+}
+
 .logoutButton {
     margin-top: 23px;
+    margin-right: 20px;
+}
+
+.reactModalContent {
+    margin-top: 30vh;
+    margin-left: calc(50vw - 250px);
+    width: 500px;
+    height: 250px;
+    background-color: white;
+    padding: 20px 30px 30px 30px;
+    border: #eeeeee 1px solid;
+    border-radius: 7px;
+    outline: none;
+}
+
+.reactModalDeleteContent {
+    margin-top: 30vh;
+    margin-left: calc(50vw - 250px);
+    width: 500px;
+    height: 150px;
+    background-color: white;
+    padding: 20px 30px 30px 30px;
+    border: #eeeeee 1px solid;
+    border-radius: 7px;
+    outline: none;
+}
+
+.reactModalOverlay {
+    div {
+        z-index: 1000;
+    }
+}
+
+.addButton {
+    border-color: transparent;
+    border-radius: 100%;
+    bottom: 50px;
+    right: 100px;
+    padding: 20px 28px;
+    float: right;
+    z-index: 400;
+    position: fixed;
+    background-color: $accent-colour;
+    transition: all 250ms ease-out;
+    &:hover {
+        margin: 0;
+        background-color: $accent-colour;
+        color: $light-font-colour;
+        padding: 30px 40px;
+        font-size: 20px;
+        text-decoration: none;
+        transition: all 250ms ease-out;
+    }
 }
