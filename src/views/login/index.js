@@ -1,27 +1,43 @@
 import React, { Component, PropTypes } from 'react';
+import { showErrorNotification } from '../../helpers/common';
 
 export default class Login extends Component {
   static propTypes = {
     router: PropTypes.any.isRequired,
+    location: PropTypes.object.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      firebaseAuth: this.props.router.routes[1].firebase && this.props.router.routes[1].firebase.auth(),
+      firebaseAuth: this.props.router.routes[0].firebase && this.props.router.routes[0].firebase.auth(),
       email: '',
       password: '',
     };
   }
 
+  componentWillMount() {
+    if (this.state.firebaseAuth !== undefined) {
+      this.state.firebaseAuth.onAuthStateChanged((user) => {
+        if (user) {
+          if (this.props.location.pathname !== '/') {
+            this.props.router.push('/');
+          }
+        }
+      });
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
-      firebaseAuth: nextProps.router.routes[1].firebase.auth(),
+      firebaseAuth: nextProps.router.routes[0].firebase.auth(),
     });
     this.state.firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
-        this.props.router.push({ pathname: '/', state: { userId: user.uid } });
+        if (this.props.location.pathname !== '/') {
+          this.props.router.push('/');
+        }
       }
     });
   }
@@ -46,40 +62,14 @@ export default class Login extends Component {
             // Register
             this.state.firebaseAuth.createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .catch((registererror) => {
-                  this._showErrorNotification(registererror.message);
+                  showErrorNotification(registererror.message);
                 });
           } else {
-            this._showErrorNotification(loginerror.message);
+            showErrorNotification(loginerror.message);
           }
         });
 
     return false;
-  }
-
-  _showErrorNotification(errorMessage) {
-    $.notify({
-      // options
-      icon: 'glyphicon glyphicon-warning-sign',
-      title: 'ERROR',
-      message: `Message received from server:  ${errorMessage}`,
-    }, {
-      // settings
-      type: 'danger',
-      allow_dismiss: true,
-      newest_on_top: false,
-      showProgressbar: false,
-      placement: {
-        from: 'bottom',
-        align: 'right',
-      },
-      offset: 20,
-      spacing: 10,
-      z_index: 1051,
-      animate: {
-        enter: 'animated fadeInDown',
-        exit: 'animated fadeOutUp',
-      },
-    });
   }
 
   render() {

@@ -1,16 +1,18 @@
 import React, { Component, PropTypes } from 'react';
-import { moveToInProgress, editTaskModal, deleteTaskModal, moveToFinished, moveToToDo } from '../../helpers/taskFunctions';
 
 import styles from './styles.scss';
 
 export default class Task extends Component {
   static propTypes = {
-    firebaseDb: PropTypes.object.isRequired,
-    userId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     duration: PropTypes.number.isRequired,
     state: PropTypes.string.isRequired,
+    editTaskModal: PropTypes.func.isRequired,
+    deleteTaskModal: PropTypes.func.isRequired,
+    moveToTodo: PropTypes.func.isRequired,
+    moveToInProgress: PropTypes.func.isRequired,
+    moveToFinished: PropTypes.func.isRequired,
   };
 
   _todoTask() {
@@ -22,9 +24,9 @@ export default class Task extends Component {
         <br />
         <div className="clearfix">
           <div className="pull-right">
-            <button className={`glyphicon glyphicon-arrow-right ${styles.taskButton}`} onClick={moveToInProgress(this.props.firebaseDb, this.props.userId, this.props.id)} />
-            <button className={`glyphicon glyphicon-pencil ${styles.taskButton}`} onClick={editTaskModal(this.props.firebaseDb, this.props.userId, this.props.id)} />
-            <button className={`glyphicon glyphicon-trash ${styles.taskButton}`}onClick={deleteTaskModal(this.props.firebaseDb, this.props.userId, this.props.id)} />
+            <button className={`glyphicon glyphicon-arrow-right ${styles.taskButton}`} onClick={() => this.props.moveToInProgress(this.props.id)} />
+            <button className={`glyphicon glyphicon-pencil ${styles.taskButton}`} onClick={() => this.props.editTaskModal(this.props.id)} />
+            <button className={`glyphicon glyphicon-trash ${styles.taskButton}`} onClick={() => this.props.deleteTaskModal(this.props.id)} />
           </div>
         </div>
       </div>
@@ -40,10 +42,10 @@ export default class Task extends Component {
         <br />
         <div className="clearfix">
           <div className="pull-right">
-            <button className={`glyphicon glyphicon-arrow-left ${styles.taskButton}`}onClick={moveToToDo(this.props.firebaseDb, this.props.userId, this.props.id)} />
-            <button className={`glyphicon glyphicon-arrow-right ${styles.taskButton}`} onClick={moveToFinished(this.props.firebaseDb, this.props.userId, this.props.id)} />
-            <button className={`glyphicon glyphicon-pencil ${styles.taskButton}`} onClick={editTaskModal(this.props.firebaseDb, this.props.userId, this.props.id)} />
-            <button className={`glyphicon glyphicon-trash ${styles.taskButton}`} onClick={deleteTaskModal(this.props.firebaseDb, this.props.userId, this.props.id)} />
+            <button className={`glyphicon glyphicon-arrow-left ${styles.taskButton}`} onClick={() => this.props.moveToTodo(this.props.id)} />
+            <button className={`glyphicon glyphicon-arrow-right ${styles.taskButton}`} onClick={() => this.props.moveToFinished(this.props.id)} />
+            <button className={`glyphicon glyphicon-pencil ${styles.taskButton}`} onClick={() => this.props.editTaskModal(this.props.id)} />
+            <button className={`glyphicon glyphicon-trash ${styles.taskButton}`} onClick={() => this.props.deleteTaskModal(this.props.id)} />
           </div>
         </div>
       </div>
@@ -59,7 +61,7 @@ export default class Task extends Component {
         <br />
         <div className="clearfix">
           <div className="pull-right">
-            <button className={`glyphicon glyphicon-trash pull-right ${styles.taskButton}`} onClick={deleteTaskModal(this.props.firebaseDb, this.props.userId, this.props.id)} />
+            <button className={`glyphicon glyphicon-trash pull-right ${styles.taskButton}`} onClick={() => this.props.deleteTaskModal(this.props.id)} />
           </div>
         </div>
       </div>

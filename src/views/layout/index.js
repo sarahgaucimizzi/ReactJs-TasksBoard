@@ -27,12 +27,12 @@ export default class Layout extends Component {
   componentWillMount() {
     this.state.firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
-        this.setState({
-          userId: user.uid,
-        });
         if (this.props.location.pathname !== '/') {
           this.props.router.push('/');
         }
+        this.setState({
+          userId: user.uid,
+        });
       } else {
         this.props.router.push('/login');
       }
