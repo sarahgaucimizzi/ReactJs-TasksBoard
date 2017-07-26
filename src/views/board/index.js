@@ -244,11 +244,11 @@ export default class Board extends Component {
   _moveToInProgress = (taskId) => {
     const task = this.state.todoTasks.filter(item => item.id === taskId);
     if (task[0] !== undefined) {
-      if ((this.state.inprogressHoursCount + task.duration) <= 8) {
-        this._editTaskFirebase(taskId, { title: task.title, duration: task.duration, state: 'inprogress', isDeleted: false });
+      if ((this.state.inprogressHoursCount + task[0].duration) <= 8) {
+        this._editTaskFirebase(taskId, { title: task[0].title, duration: task[0].duration, state: 'inprogress', isDeleted: false });
         this.setState({
-          todoHoursCount: this.state.todoHoursCount - task.duration,
-          inprogressCount: this.state.inprogressCount + task.duration,
+          todoHoursCount: this.state.todoHoursCount - task[0].duration,
+          inprogressCount: this.state.inprogressCount + task[0].duration,
         });
       } else {
         showWarningNotification('Cannot have more than 8 hours in the in progress column');
@@ -259,11 +259,11 @@ export default class Board extends Component {
   }
 
   _moveToFinished = (taskId) => {
-    const task = this.state.inprogressCount.filter(item => item.id === taskId);
+    const task = this.state.inprogressTasks.filter(item => item.id === taskId);
     if (task[0] !== undefined) {
-      this._editTaskFirebase(taskId, { title: task.title, duration: task.duration, state: 'finished', isDeleted: false });
+      this._editTaskFirebase(taskId, { title: task[0].title, duration: task[0].duration, state: 'finished', isDeleted: false });
       this.setState({
-        inprogressCount: this.state.inprogressCount - task.duration,
+        inprogressCount: this.state.inprogressCount - task[0].duration,
       });
     } else {
       showErrorNotification('Task not found. Try again.');
@@ -372,13 +372,13 @@ export default class Board extends Component {
         </div>
         <div className="row">
           <div className="col-md-4">
-            <div id="tasksContainer-todo">{this._renderTodoTasks()}</div>
+            <div id="tasksContainer-todo"><h2 className={styles.columnHeader}>Todo</h2>{this._renderTodoTasks()}</div>
           </div>
           <div className="col-md-4">
-            <div id="tasksContainer-inprogress">{this._renderInProgressTasks()}</div>
+            <div id="tasksContainer-inprogress"><h2 className={styles.columnHeader}>In Progress</h2>{this._renderInProgressTasks()}</div>
           </div>
           <div className="col-md-4">
-            <div id="tasksContainer-finished">{this._renderFinishedTasks()}</div>
+            <div id="tasksContainer-finished"><h2 className={styles.columnHeader}>Finished</h2>{this._renderFinishedTasks()}</div>
           </div>
         </div>
         <ReactModal className={styles.reactModalContent} shouldCloseOnOverlayClick portalClassName={styles.reactModalOverlay} isOpen={this.state.openAddTaskModal} onRequestClose={this._closeAddTaskModal} contentLabel="Add new Task">

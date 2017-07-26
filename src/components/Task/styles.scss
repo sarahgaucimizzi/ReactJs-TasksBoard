@@ -1,24 +1,28 @@
 @import '../../variables.scss';
 
 .taskTodo {
-    background-color: $todo-colour;
+    border-top: 10px solid $todo-colour;
+    border-radius: 4px;
 }
 
 .taskInProgress {
-    background-color: $inprogress-colour;
+    border-top: 10px solid $inprogress-colour;
+    border-radius: 4px;
 }
 
 .taskFinished {
-    background-color: $finished-colour;
+    border-top: 10px solid $finished-colour;
+    border-radius: 4px;
 }
 
 .task {
     margin: 20px;
     padding: 20px 30px;
+    background-color: #FFFFFF;
 }
 
 .taskTitle {
-    padding: 10px;
+    padding: 10px 0;
     font-size: 24px;
     font-family: 'Questrial', sans-serif;
 }

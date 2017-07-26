@@ -5,9 +5,23 @@
     color: $light-font-colour;
 }
 
+.columnHeader{
+    font-family: 'Questrial', sans-serif;
+    color: $light-font-colour;
+    margin-left: 20px;
+    opacity: 0.8;
+    font-size: 19px;
+    letter-spacing: 1px;
+}
+
 .logoutButton {
-    margin-top: 23px;
+    margin-top: 40px;
     margin-right: 20px;
+    background-color: lightblue;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: transparent;
+    padding: 10px 15px;
 }
 
 .reactModalContent {
