@@ -1,29 +1,27 @@
-# Minimalistic React + Redux Boilerplate
+# Tasks board
 
 **Table of Contents**
 
-- [List of Packages included](#list-of-packages-included)
+- [List of Packages included](#features)
 - [Installation](#installation)
 - [Run](#run)
-- [Packaging](#packaging)
 - [Credits](#credits)
 
-## List of Packages included
+## Features
 
-* Webpack
-* Babel
-* ES2015
-* ESLint
-* React
-* Redux
-* Routing
-* Immutable.JS
-* Node Sass
+ - Uses Firebase
+ - Authenticate using email and password
+ - Create tasks in todo
+ - Move tasks to in progress
+ - Move tasks to finished
+ - Edit tasks
+ - Delete tasks
+ - Has storage persistance
 
 
 ## Installation
 
-Use the following commands to install this boilerplate.
+Use the following commands to install requried node packages.
 
 ```sh
 $ npm install -g eslint eslint-plugin-jsx-a11y@^2.2.3 eslint-plugin-import eslint-plugin-react eslint-config-airbnb
@@ -32,24 +30,12 @@ $ npm install
 
 ## Run
 
-Use the command below to run the boilerplate in development mode.
+Use the command below to run the app.
 
 ```sh
 $ npm start
 ```
 
-## Packaging
-
-Use the following command to create a production ready build in the `dist` folder.
-
-```sh
-$ npm run build
-```
-
 ## Credits
 
-React: http://facebook.github.io/react/
-
-Babel: http://babeljs.io/
-
-Webpack: https://webpack.github.io/docs/
+Boilerplate: https://github.com/xontab/minimalistic-react-redux-boilerplate 

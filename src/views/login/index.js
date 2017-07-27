@@ -20,9 +20,11 @@ export default class Login extends Component {
   }
 
   componentWillMount() {
+    // If firebaseAuth is not undefined: Set auth change listener
     if (this.state.firebaseAuth !== undefined) {
       this.state.firebaseAuth.onAuthStateChanged((user) => {
         if (user) {
+          // If logged in go to board
           if (this.props.location.pathname !== '/') {
             this.props.router.push('/');
           }
@@ -32,11 +34,13 @@ export default class Login extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // Once firebaseAuth is defined: Set auth change listener
     this.setState({
       firebaseAuth: nextProps.router.routes[0].firebase.auth(),
     });
     this.state.firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
+        // If logged in go to board
         if (this.props.location.pathname !== '/') {
           this.props.router.push('/');
         }
@@ -44,12 +48,14 @@ export default class Login extends Component {
     });
   }
 
+  // Supervised form element: Email
   _handleEmailChange = (event) => {
     this.setState({
       email: event.target.value,
     });
   }
 
+  // Supervised form element: Password
   _handlePasswordChange = (event) => {
     this.setState({
       password: event.target.value,
@@ -61,7 +67,7 @@ export default class Login extends Component {
     this.state.firebaseAuth.signInWithEmailAndPassword(this.state.email.toString(), this.state.password.toString())
         .catch((loginerror) => {
           if (loginerror.code === 'auth/user-not-found') {
-            // Register
+            // If not found try register
             this.state.firebaseAuth.createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .catch((registererror) => {
                   showErrorNotification(registererror.message);

@@ -1,3 +1,4 @@
+// Firebase app configuration
 export const CONFIG = {
   apiKey: 'AIzaSyDo2kQgwt3Ucka7KamKocYH-r1rLA4_bpY',
   authDomain: 'tasks-dab65.firebaseapp.com',

@@ -35,7 +35,9 @@ export default class Board extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // Update state with newProps and fetch all tasks for that user
     this.setState({
+      firebaseAuth: nextProps.firebase.auth(),
       firebaseDb: nextProps.firebase.database(),
       userId: nextProps.userId,
     });
@@ -45,23 +47,27 @@ export default class Board extends Component {
 
   _logout = () => {
     this.state.firebaseAuth.signOut().then(() => {
+      // Auth listener will be triggered and redirect to login
     }).catch((error) => {
       showErrorNotification(error.message);
     });
   }
 
+  // Supervised form element: Title
   _onTitleChange = (event) => {
     this.setState({
       title: event.target.value,
     });
   }
 
+  // Supervised form element: Duration
   _onDurationChange = (event) => {
     this.setState({
       duration: parseInt(event.target.value, 10),
     });
   }
 
+  // Open modal and clear out current task data
   _addTaskModal = () => {
     this.setState({
       openAddTaskModal: true,
@@ -77,8 +83,10 @@ export default class Board extends Component {
 
     if (this.state.title !== '' && !isNaN(duration)) {
       if (duration > 8) {
+        // One task alone cannot be more than 8 hours or it will never be able to go in progress
         showWarningNotification('In progress only allows up to 8 hours at a time.');
       } else if ((this.state.todoHoursCount + duration) <= 24) {
+        // Todo column can have up to 24 hours in total
         this._addTaskFirebase(this.state.title, duration);
         this._closeAddTaskModal();
       } else {
@@ -89,12 +97,14 @@ export default class Board extends Component {
     }
   };
 
+  // Close modal
   _closeAddTaskModal = () => {
     this.setState({
       openAddTaskModal: false,
     });
   }
 
+  // Open edit modal if task found. Only those in todo and in progress can be edited
   _editTaskModal = (taskId) => {
     const task = this.state.todoTasks.filter(item => item.id === taskId);
     if (task[0] !== undefined) {
@@ -126,9 +136,11 @@ export default class Board extends Component {
 
     if (this.state.title !== '' && !isNaN(duration)) {
       if (duration > 8) {
+        // One task alone cannot be more than 8 hours or it will never be able to go in progress. in Progress allows up to 8 hours only.
         showWarningNotification('In progress only allows up to 8 hours at a time.');
       } else if (this.state.state === 'todo') {
         if ((this.state.todoHoursCount + duration) <= 24) {
+          // If the task edit is still within 24 hour range - edit it and close modal
           this._editTaskFirebase(this.state.taskId, { title: this.state.title, duration, state: 'todo', isDeleted: false });
 
           this._closeEditTaskModal();
@@ -137,6 +149,7 @@ export default class Board extends Component {
         }
       } else if (this.state.state === 'inprogress') {
         if ((this.state.inprogressCount + duration) <= 8) {
+          // If the task edit is still within 8 hour range - edit it and close modal
           this._editTaskFirebase(this.state.taskId, { title: this.state.title, duration, state: 'inprogress', isDeleted: false });
 
           this._closeEditTaskModal();
@@ -151,12 +164,14 @@ export default class Board extends Component {
     }
   }
 
+  // Close modal
   _closeEditTaskModal = () => {
     this.setState({
       openEditTaskModal: false,
     });
   }
 
+  // Open modal if task found in todo or in progress or finished
   _deleteTaskModal = (taskId) => {
     const task = this.state.todoTasks.filter(item => item.id === taskId);
     if (task[0] !== undefined) {
@@ -194,17 +209,20 @@ export default class Board extends Component {
     }
   }
 
+  // Soft delete task
   _deleteTask = () => {
     this._editTaskFirebase(this.state.taskId, { title: this.state.title, duration: this.state.duration, state: this.state.state, isDeleted: true });
     this._closeDeleteTaskModal();
   }
 
+  // Close modal
   _closeDeleteTaskModal = () => {
     this.setState({
       openDeleteTaskModal: false,
     });
   }
 
+  // Push new task to firebase for the user
   _addTaskFirebase = (title, duration) => {
     const newNode = this.state.firebaseDb.ref(`tasks/${this.state.userId}`).push();
     newNode.set({
@@ -215,6 +233,7 @@ export default class Board extends Component {
     });
   }
 
+  // Update task in firebase with changes
   _editTaskFirebase = (taskId, updatedTask) => {
     this.state.firebaseDb.ref(`tasks/${this.state.userId}/${taskId}`).set({
       title: updatedTask.title,
@@ -224,6 +243,7 @@ export default class Board extends Component {
     });
   }
 
+  // Only ones in progress can go to todo - if found and in range update with new state
   _moveToTodo = (taskId) => {
     const task = this.state.inprogressTasks.filter(item => item.id === taskId);
     if (task[0] !== undefined) {
@@ -241,6 +261,7 @@ export default class Board extends Component {
     }
   }
 
+  // Only ones todo can go to in progress - if found and in range update with new state
   _moveToInProgress = (taskId) => {
     const task = this.state.todoTasks.filter(item => item.id === taskId);
     if (task[0] !== undefined) {
@@ -258,6 +279,7 @@ export default class Board extends Component {
     }
   }
 
+  // Only ones in progress can go to finished - if found update new state
   _moveToFinished = (taskId) => {
     const task = this.state.inprogressTasks.filter(item => item.id === taskId);
     if (task[0] !== undefined) {
@@ -270,6 +292,7 @@ export default class Board extends Component {
     }
   }
 
+  // Retrieve all tasks for the user, set the state which triggers a render to update the board
   _fetchTasks = (userId = this.state.userId) => {
     if (userId !== null || userId !== '' || userId !== undefined) {
       const userTasks = this.state.firebaseDb.ref(`tasks/${userId}`).orderByChild('isDeleted').equalTo(false);
@@ -310,6 +333,7 @@ export default class Board extends Component {
     }
   }
 
+  // Loop through tasks and render
   _renderTodoTasks() {
     return this.state.todoTasks.map((item, index) =>
       <Task
@@ -327,6 +351,7 @@ export default class Board extends Component {
       />);
   }
 
+  // Loop through tasks and render
   _renderInProgressTasks() {
     return this.state.inprogressTasks.map((item, index) =>
       <Task
@@ -344,6 +369,7 @@ export default class Board extends Component {
       />);
   }
 
+  // Loop through tasks and render
   _renderFinishedTasks() {
     return this.state.finishedTasks.map((item, index) =>
       <Task

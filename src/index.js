@@ -12,6 +12,7 @@ import Board from './views/board';
 import { CONFIG } from './config';
 import './styles.scss';
 
+// Initialise firebase app using configuration
 const app = Firebase.initializeApp(CONFIG);
 
 render(

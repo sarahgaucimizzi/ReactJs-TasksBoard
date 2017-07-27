@@ -27,6 +27,7 @@ export default class Layout extends Component {
   componentWillMount() {
     this.state.firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
+        // If logged in go to board
         if (this.props.location.pathname !== '/') {
           this.props.router.push('/');
         }
@@ -34,6 +35,7 @@ export default class Layout extends Component {
           userId: user.uid,
         });
       } else {
+        // If not logged in go to login page
         this.props.router.push('/login');
       }
     });

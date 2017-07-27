@@ -16,6 +16,7 @@ export default class Task extends Component {
   };
 
   _todoTask() {
+    // Todo Task Template
     return (
       <div className={`${styles.task} ${styles.taskTodo} animated fadeInUp`}>
         <span className={styles.taskDuration}>{this.props.duration} hours</span>
@@ -34,6 +35,7 @@ export default class Task extends Component {
   }
 
   _inprogressTask() {
+    // In Progress Task Template
     return (
       <div className={`${styles.task} ${styles.taskInProgress} animated fadeInUp`}>
         <span className={styles.taskDuration}>{this.props.duration} hours</span>
@@ -53,6 +55,7 @@ export default class Task extends Component {
   }
 
   _finishedTask() {
+    // Finished Task Template
     return (
       <div className={`${styles.task} ${styles.taskFinished} animated fadeInUp`}>
         <span className={styles.taskDuration}>{this.props.duration} hours</span>
