@@ -39,10 +39,10 @@ $ npm start
 
 ## Screenshots
 
-![alt text](http://imgur.com/VDlXWxn)
-![alt text](http://imgur.com/JuCTd7Z)
-![alt text](http://imgur.com/aeIEKne)
-![alt text](http://imgur.com/OWAlJQz)
+![alt text](http://i.imgur.com/VDlXWxn.png)
+![alt text](http://i.imgur.com/JuCTd7Z.png)
+![alt text](http://i.imgur.com/aeIEKne.png)
+![alt text](http://i.imgur.com/OWAlJQz.png)
 
 ## Credits
 
